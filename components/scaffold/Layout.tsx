@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { rgba } from "polished";
 import { sizes, colors } from "variables";
-import { Outlet, Link, NavLink } from "react-router-dom";
+import Link from "next/link";
 import { Stacked, Columns } from "unflexible-ui-core";
 import { SimpleButton } from "components/button";
 
-import { useContext, useState } from "react";
+import { ReactNode, useContext, useState } from "react";
+import { useRouter } from "next/router";
 import { StoreContext } from "providers";
+import { Post_Type, useGetPostTypesQuery } from "lib/graphql";
 
 type MenuLink = {
   name: string;
@@ -14,10 +16,11 @@ type MenuLink = {
 };
 
 type Props = {
-  menu: MenuLink[];
+  children: ReactNode;
 };
 
-export const Layout = ({ menu }: Props) => {
+export const Layout = ({ children }: Props) => {
+  const { pathname } = useRouter();
   const { busy, popup, auth } = useContext(StoreContext);
 
   const [email, setEmail] = useState("");
@@ -26,6 +29,45 @@ export const Layout = ({ menu }: Props) => {
   const signIn = () => {
     auth.signIn(email, password);
   };
+
+  const getPostTypes = useGetPostTypesQuery(
+    auth.client.graphQLClient,
+    {},
+    {
+      enabled: auth.client.firebaseId !== null,
+    }
+  );
+
+  const menu: MenuLink[] = [
+    {
+      name: "ホーム",
+      path: "/"
+    },
+    ...((getPostTypes.data?.post_type as Post_Type[]) || []).map(
+      (p: Post_Type) => {
+        return {
+          name: p.name,
+          path: `/post/${p.slug}`,
+        };
+      }
+    ),
+    {
+      name: "カテゴリー",
+      path: "/category",
+    },
+    {
+      name: "タグ",
+      path: "/tag",
+    },
+    {
+      name: "画像",
+      path: "/media",
+    },
+    {
+      name: "投稿タイプ",
+      path: "/post-type",
+    },
+  ];
 
   return (
     <Component>
@@ -58,10 +100,12 @@ export const Layout = ({ menu }: Props) => {
 
       <aside>
         <Stacked paddingPos="top">
-          <Title to="/">
-            <img src="/images/sitelogo_v.png" alt="" />
-            <span>ヤナガワ村役場HP 管理画面</span>
-          </Title>
+          <Link href="/" passHref>
+            <Title>
+              <img src="/images/sitelogo_v.png" alt="" />
+              <span>ヤナガワ村役場HP 管理画面</span>
+            </Title>
+          </Link>
         </Stacked>
 
         <Stacked paddingPos="top">
@@ -70,7 +114,11 @@ export const Layout = ({ menu }: Props) => {
               {menu.map((l: MenuLink, index: number) => {
                 return (
                   <li key={index}>
-                    <MenuNavLink to={l.path}>{l.name}</MenuNavLink>
+                    <Link href={l.path} passHref>
+                      <MenuNavLink isActive={pathname.includes(l.path)}>
+                        {l.name}
+                      </MenuNavLink>
+                    </Link>
                   </li>
                 );
               })}
@@ -101,7 +149,7 @@ export const Layout = ({ menu }: Props) => {
       <main>
         <Loader visible={busy.isBusy || (!auth.admin && auth.isLoading)} />
 
-        {auth.admin && <Outlet />}
+        {auth.admin && children}
 
         {!auth.admin && !auth.isLoading && (
           <Stacked height="100%">
@@ -196,7 +244,7 @@ const Popup = styled.div`
   }
 `;
 
-const Title = styled(Link)`
+const Title = styled.a`
   display: block;
   padding: 0 ${sizes.gapM};
   color: ${colors.text};
@@ -223,7 +271,11 @@ const Menu = styled.menu`
   }
 `;
 
-const MenuNavLink = styled(NavLink)`
+type MenuNavLinkProps = {
+  isActive?: boolean;
+};
+
+const MenuNavLink = styled.a<MenuNavLinkProps>`
   position: relative;
   display: block;
   padding: ${sizes.gapM} ${sizes.gapM};
@@ -242,6 +294,16 @@ const MenuNavLink = styled(NavLink)`
     background-color: transparent;
     transition-duration: 0.3s;
   }
+
+  ${(p) =>
+    p.isActive &&
+    `
+    color: ${colors.theme};
+
+    &::before {
+      background-color: ${colors.theme};
+    }
+  `}
 
   &.active,
   &:hover {

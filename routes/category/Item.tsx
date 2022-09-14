@@ -1,10 +1,10 @@
 import { colors } from "variables";
 import { Stacked, Columns, Block, PlainText } from "unflexible-ui-core";
 import { Panel } from "components/container";
-import { SimpleButton, IconTagButton } from "components/button";
+import { IconTagButton } from "components/button";
 import { Editor } from "domains/category";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Category, useGetCategoryQuery } from "lib/graphql/generated";
 import { StoreContext } from "providers";

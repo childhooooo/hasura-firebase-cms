@@ -5,7 +5,7 @@ import { Form } from "components/container";
 import { WithAlert, SimpleButton } from "components/button";
 
 import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   Category,
@@ -21,7 +21,7 @@ type Props = {
 };
 
 export const Editor = ({ category, onUpdate }: Props) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const form = useForm<UpdateCategoryMutationVariables>({
     defaultValues: {
       id: category.id,
@@ -60,7 +60,7 @@ export const Editor = ({ category, onUpdate }: Props) => {
             {
               onSuccess: () => {
                 store.busy.setIsBusy(false);
-                navigate(-1);
+                router.back();
               },
               onError: () => {
                 store.busy.setIsBusy(false);

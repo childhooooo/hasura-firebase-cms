@@ -28,7 +28,7 @@ export const IconTagButton = ({
 
   return (
     <Component
-      onClick={onClick}
+      onClick={handleClick}
       type={type}
       color={color}
       reverse={reverse || false}
@@ -66,7 +66,7 @@ const Component = styled.button<ComponentProps>`
   border: 2px solid ${(p) => p.color};
   border-radius: 50%;
   text-align: center;
-  line-height: .75;
+  line-height: 0.75;
   transition-duration: 0.3s;
 
   .icon {

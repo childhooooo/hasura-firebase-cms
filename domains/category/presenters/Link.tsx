@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { rgba } from "polished";
 import { sizes, colors } from "variables";
-import { Link as L } from "react-router-dom";
+import { default as L } from "next/link";
 
 import { Category } from "lib/graphql";
 
@@ -10,10 +10,14 @@ type Props = {
 };
 
 export const Link = ({ category }: Props) => {
-  return <Component to={`/category/${category.id}`}>{category.name}</Component>;
+  return (
+    <L href={`/category/${category.id}`} passHref>
+      <Component>{category.name}</Component>
+    </L>
+  );
 };
 
-const Component = styled(L)`
+const Component = styled.a`
   display: block;
   padding: ${sizes.gapM};
   color: ${colors.text};

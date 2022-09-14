@@ -1,0 +1,42 @@
+mutation UpdatePost(
+  $post_id: bigint!
+  $title: String!
+  $category_id: Int!
+  $tags: [post_tag_insert_input!] = []
+  $values: [value_insert_input!] = []
+  $created_at: timestamptz
+  $outdated_revision_ids: [bigint!] = []
+) {
+  update_post_by_pk(
+    pk_columns: { id: $post_id }
+    _set: { title: $title, category_id: $category_id, created_at: $created_at }
+  ) {
+    id
+  }
+
+  insert_revision_one(
+    object: { post_id: $post_id, values: { data: $values } }
+  ) {
+    id
+  }
+
+  delete_revision(where: { id: { _in: $outdated_revision_ids } }) {
+    returning {
+      id
+    }
+  }
+
+  delete_post_tag(where: { post_id: { _eq: $post_id } }) {
+    returning {
+      post_id
+      tag_id
+    }
+  }
+
+  insert_post_tag(objects: $tags) {
+    returning {
+      post_id
+      tag_id
+    }
+  }
+}

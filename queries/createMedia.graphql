@@ -1,0 +1,17 @@
+mutation CreateMedia(
+  $name: String!
+  $url: String!
+  $media_type: String!
+  $files: [file_insert_input!] = []
+) {
+  insert_media_one(
+    object: {
+      name: $name
+      url: $url
+      media_type: $media_type
+      files: { data: $files }
+    }
+  ) {
+    id
+  }
+}

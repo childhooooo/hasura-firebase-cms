@@ -1,0 +1,12 @@
+query GetCategory($id: Int!) {
+  category_by_pk(id: $id) {
+    id
+    slug
+    name
+    post_type {
+      id
+      slug
+      name
+    }
+  }
+}

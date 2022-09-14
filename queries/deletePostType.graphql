@@ -1,0 +1,5 @@
+mutation DeletePostType($id: Int!) {
+  delete_post_type_by_pk(id: $id) {
+    id
+  }
+}

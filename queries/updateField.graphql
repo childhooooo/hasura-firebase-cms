@@ -1,0 +1,36 @@
+mutation UpdateField(
+  $id: bigint!
+  $slug: String!
+  $name: String!
+  $field_type_id: Int!
+  $field_post_type_id: Int
+  $order: Int = 10
+  $multiple: Boolean = false
+  $required: Boolean = false
+) {
+  update_field_by_pk(
+    pk_columns: { id: $id }
+    _set: {
+      slug: $slug
+      name: $name
+      field_type_id: $field_type_id
+      field_post_type_id: $field_post_type_id
+      order: $order
+      multiple: $multiple
+      required: $required
+    }
+  ) {
+    id
+    slug
+    name
+    field_type {
+      id
+      slug
+      name
+    }
+    field_post_type_id
+    multiple
+    required
+    order
+  }
+}

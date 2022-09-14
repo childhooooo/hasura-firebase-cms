@@ -1,0 +1,5 @@
+query GetAdmin($id: String!) {
+  admin_by_pk(id: $id) {
+    id
+  }
+}

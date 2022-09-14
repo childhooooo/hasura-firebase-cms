@@ -1,0 +1,31 @@
+query GetPostType($id: Int!) {
+  post_type_by_pk(id: $id) {
+    id
+    slug
+    name
+    icon_tag
+    order
+    fields(order_by: { order: asc }) {
+      id
+      slug
+      name
+      field_type_id
+      field_type {
+        id
+        slug
+        name
+        order
+        is_post
+      }
+      required
+      multiple
+      order
+      field_post_type_id
+      field_post_type {
+        id
+        slug
+        name
+      }
+    }
+  }
+}

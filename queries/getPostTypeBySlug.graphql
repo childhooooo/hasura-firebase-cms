@@ -1,0 +1,29 @@
+query GetPostTypeBySlug($slug: String!) {
+  post_type(where: { slug: { _eq: $slug } }) {
+    id
+    slug
+    name
+    icon_tag
+    order
+    fields(order_by: { order: asc }) {
+      id
+      slug
+      name
+      field_type {
+        id
+        slug
+        name
+        order
+      }
+      required
+      multiple
+      order
+      field_post_type_id
+      field_post_type {
+        id
+        slug
+        name
+      }
+    }
+  }
+}

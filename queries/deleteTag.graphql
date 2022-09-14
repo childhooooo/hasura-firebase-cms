@@ -1,0 +1,5 @@
+mutation DeleteTag($id: Int!) {
+  delete_tag_by_pk(id: $id) {
+    id
+  }
+}

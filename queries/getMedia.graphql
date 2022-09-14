@@ -1,0 +1,15 @@
+query GetMedia($id: bigint!) {
+  media_by_pk(id: $id) {
+    id
+    name
+    url
+    media_type
+    created_at
+    files {
+      id
+      label
+      url
+      firebase_path
+    }
+  }
+}

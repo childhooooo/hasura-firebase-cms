@@ -1,0 +1,10 @@
+query GetCategories($post_type_id: Int) {
+  category(
+    order_by: { id: asc }
+    where: { post_type_id: { _eq: $post_type_id } }
+  ) {
+    id
+    slug
+    name
+  }
+}

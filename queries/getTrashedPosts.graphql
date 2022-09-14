@@ -1,0 +1,120 @@
+query GetTrashedPosts(
+  $post_type_slug: String!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  post_type(where: { slug: { _eq: $post_type_slug } }) {
+    id
+    slug
+    name
+  }
+
+  post(
+    limit: $limit
+    offset: $offset
+    order_by: { created_at: desc }
+    where: {
+      _and: {
+        deleted_at: { _is_null: false }
+        post_type: { slug: { _eq: $post_type_slug } }
+      }
+    }
+  ) {
+    id
+    title
+    category_id
+    category {
+      id
+      slug
+      name
+    }
+    tags(order_by: { tag_id: asc }) {
+      tag {
+        id
+        slug
+        name
+      }
+    }
+    revisions(order_by: { created_at: desc }) {
+      id
+      created_at
+      values {
+        id
+        field_id
+        field {
+          id
+          slug
+          name
+        }
+        text {
+          body
+        }
+        numeric {
+          body
+        }
+        integer {
+          body
+        }
+        post {
+          body {
+            id
+            title
+            created_at
+            revisions(order_by: { created_at: desc }) {
+              id
+              created_at
+              values {
+                id
+                field_id
+                field {
+                  id
+                  slug
+                  name
+                }
+                text {
+                  body
+                }
+                numeric {
+                  body
+                }
+                integer {
+                  body
+                }
+                post {
+                  body {
+                    id
+                    title
+                  }
+                }
+                timestamp {
+                  body
+                }
+                boolean {
+                  body
+                }
+              }
+            }
+          }
+        }
+        timestamp {
+          body
+        }
+        boolean {
+          body
+        }
+      }
+    }
+    post_type {
+      id
+      slug
+      name
+    }
+    created_at
+  }
+
+  post_aggregate {
+    aggregate {
+      count
+    }
+  }
+}

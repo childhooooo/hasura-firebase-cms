@@ -1,0 +1,7 @@
+query GetTag($id: Int!) {
+  tag_by_pk(id: $id) {
+    id
+    slug
+    name
+  }
+}

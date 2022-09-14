@@ -1,0 +1,5 @@
+mutation DeleteField($id: bigint!) {
+  delete_field_by_pk(id: $id) {
+    id
+  }
+}

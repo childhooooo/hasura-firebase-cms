@@ -1,0 +1,7 @@
+mutation DeleteContents($ids: [bigint!] = []) {
+  delete_content(where: { id: { _in: $ids } }) {
+    returning {
+      id
+    }
+  }
+}

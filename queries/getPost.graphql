@@ -1,0 +1,145 @@
+query GetPost($id: bigint!) {
+  post_by_pk(id: $id) {
+    id
+    title
+    category_id
+    category {
+      id
+      slug
+      name
+    }
+    tags(order_by: { tag_id: asc }) {
+      tag {
+        id
+        slug
+        name
+      }
+    }
+    revisions(order_by: { created_at: desc }) {
+      id
+      created_at
+      values {
+        id
+        field_id
+        field {
+          id
+          slug
+          name
+        }
+        text {
+          body
+        }
+        numeric {
+          body
+        }
+        integer {
+          body
+        }
+        media {
+          body {
+            id
+            name
+            url
+            media_type
+            files {
+              id
+              label
+              url
+              firebase_path
+            }
+          }
+        }
+        post {
+          body {
+            id
+            title
+            created_at
+            revisions(order_by: { created_at: desc }) {
+              id
+              created_at
+              values {
+                id
+                field_id
+                field {
+                  id
+                  slug
+                  name
+                }
+                text {
+                  body
+                }
+                numeric {
+                  body
+                }
+                integer {
+                  body
+                }
+                media {
+                  body {
+                    id
+                    name
+                    url
+                    media_type
+                    files {
+                      id
+                      label
+                      url
+                      firebase_path
+                    }
+                  }
+                }
+                post {
+                  body {
+                    id
+                    title
+                  }
+                }
+                timestamp {
+                  body
+                }
+                boolean {
+                  body
+                }
+              }
+            }
+          }
+        }
+        timestamp {
+          body
+        }
+        boolean {
+          body
+        }
+      }
+    }
+    post_type {
+      id
+      slug
+      name
+      fields(order_by: { order: asc }) {
+        id
+        slug
+        name
+        field_type_id
+        field_type {
+          id
+          slug
+          name
+          order
+          is_post
+        }
+        required
+        multiple
+        order
+        field_post_type_id
+        field_post_type {
+          id
+          slug
+          name
+        }
+      }
+    }
+    created_at
+    deleted_at
+  }
+}

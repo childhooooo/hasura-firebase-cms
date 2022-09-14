@@ -1,0 +1,14 @@
+query GetPostTypes {
+  post_type(order_by: { order: asc }) {
+    id
+    slug
+    name
+    icon_tag
+  }
+
+  post_type_aggregate {
+    aggregate {
+      count
+    }
+  }
+}

@@ -1,0 +1,7 @@
+mutation CreateCategory($slug: String!, $name: String!, $post_type_id: Int!) {
+  insert_category_one(
+    object: { slug: $slug, name: $name, post_type_id: $post_type_id }
+  ) {
+    id
+  }
+}

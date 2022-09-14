@@ -1,0 +1,5 @@
+mutation CreateTag($slug: String!, $name: String!) {
+  insert_tag_one(object: { slug: $slug, name: $name }) {
+    id
+  }
+}

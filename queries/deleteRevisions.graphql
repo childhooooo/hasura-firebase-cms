@@ -1,0 +1,7 @@
+mutation DeleteRevisions($ids: [bigint!] = []) {
+  delete_revision(where: { id: { _in: $ids } }) {
+    returning {
+      id
+    }
+  }
+}

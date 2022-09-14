@@ -1,0 +1,16 @@
+mutation CreatePostType(
+  $slug: String!
+  $name: String!
+  $icon_tag: String
+  $order: Int = 10
+) {
+  insert_post_type_one(
+    object: { slug: $slug, name: $name, icon_tag: $icon_tag, order: $order }
+  ) {
+    id
+    slug
+    name
+    icon_tag
+    order
+  }
+}

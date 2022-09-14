@@ -1,0 +1,36 @@
+mutation CreateField(
+  $slug: String!
+  $name: String!
+  $post_type_id: Int!
+  $field_type_id: Int!
+  $required: Boolean = false
+  $multiple: Boolean = false
+  $order: Int = 10
+  $field_post_type_id: Int
+) {
+  insert_field_one(
+    object: {
+      slug: $slug
+      name: $name
+      post_type_id: $post_type_id
+      field_type_id: $field_type_id
+      required: $required
+      multiple: $multiple
+      order: $order
+      field_post_type_id: $field_post_type_id
+    }
+  ) {
+    id
+    slug
+    name
+    field_type {
+      id
+      slug
+      name
+    }
+    required
+    multiple
+    order
+    field_post_type_id
+  }
+}

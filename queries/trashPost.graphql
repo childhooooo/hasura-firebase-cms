@@ -1,0 +1,8 @@
+mutation TrashPost($id: bigint!, $deleted_at: timestamptz) {
+  update_post_by_pk(
+    pk_columns: { id: $id }
+    _set: { deleted_at: $deleted_at }
+  ) {
+    id
+  }
+}

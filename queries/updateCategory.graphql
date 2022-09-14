@@ -1,0 +1,8 @@
+mutation UpdateCategory($id: Int!, $slug: String!, $name: String!) {
+  update_category_by_pk(
+    pk_columns: { id: $id }
+    _set: { slug: $slug, name: $name }
+  ) {
+    id
+  }
+}

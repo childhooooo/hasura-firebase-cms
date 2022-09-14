@@ -1,0 +1,26 @@
+query GetMedias($limit: Int = 10, $offset: Int = 0, $type_ilike: String = "%") {
+  media(
+    order_by: { created_at: desc }
+    limit: $limit
+    offset: $offset
+    where: { media_type: { _ilike: $type_ilike } }
+  ) {
+    id
+    name
+    url
+    media_type
+    created_at
+    files {
+      id
+      label
+      url
+      firebase_path
+    }
+  }
+
+  media_aggregate(where: { media_type: { _ilike: $type_ilike } }) {
+    aggregate {
+      count
+    }
+  }
+}

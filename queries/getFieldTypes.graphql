@@ -1,0 +1,8 @@
+query GetFieldTypes {
+  field_type {
+    id
+    slug
+    name
+    is_post
+  }
+}

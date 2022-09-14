@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  User,
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -42,27 +43,32 @@ export function useAuth(): AuthState {
     }
   );
 
+  const prepare = async (user: User | null) => {
+    if (user) {
+      const token = await user.getIdToken();
+      setClient(
+        RequestClient.generate({
+          firebaseId: user.uid,
+          token,
+        })
+      );
+    } else {
+      setClient(RequestClient.anonymouse());
+    }
+  };
+
   useEffect(() => {
+    prepare(auth.currentUser).catch(() => {
+      setIsFirebaseError(true);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setIsLoading(true);
       setIsFirebaseError(false);
 
-      if (user) {
-        try {
-          const token = await user.getIdToken();
-          setClient(
-            RequestClient.generate({
-              firebaseId: user.uid,
-              token,
-            })
-          );
-        } catch (e) {
-          setIsFirebaseError(true);
-          setClient(RequestClient.anonymouse());
-        }
-      } else {
-        setClient(RequestClient.anonymouse());
-      }
+      prepare(user).catch(() => {
+        setIsFirebaseError(true);
+      });
 
       setIsLoading(false);
     });
@@ -71,29 +77,14 @@ export function useAuth(): AuthState {
   }, []);
 
   useEffect(() => {
-    if (getAdmin.failureCount > 2) {
-      (async () => {
-        if (auth.currentUser) {
-          try {
-            const token = await auth.currentUser.getIdToken();
-
-            setClient(
-              RequestClient.generate({
-                firebaseId: auth.currentUser.uid,
-                token,
-              })
-            );
-
-            setIsFirebaseError(false);
-          } catch {
-            signOut();
-          }
-        } else {
-          signOut();
-        }
-      })();
+    if (getAdmin.failureCount > 0) {
+      if (!auth.currentUser) {
+        signOut();
+      } else {
+        prepare(auth.currentUser).catch(() => signOut());
+      }
     }
-  }, [getAdmin.isError]);
+  }, [getAdmin.failureCount]);
 
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
@@ -104,41 +95,10 @@ export function useAuth(): AuthState {
         email,
         password
       );
-      const token = await userCredential.user.getIdToken();
-
-      setClient(
-        RequestClient.generate({
-          firebaseId: userCredential.user.uid,
-          token,
-        })
-      );
-      setIsFirebaseError(false);
+      await prepare(userCredential.user);
     } catch (e: any) {
-      setClient(RequestClient.anonymouse());
       setIsFirebaseError(true);
     }
-  };
-
-  const _signIn = async () => {
-    setIsLoading(true);
-
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const token = await result.user.getIdToken();
-
-      setClient(
-        RequestClient.generate({
-          firebaseId: result.user.uid,
-          token,
-        })
-      );
-      setIsFirebaseError(false);
-    } catch (e: any) {
-      setClient(RequestClient.anonymouse());
-      setIsFirebaseError(true);
-    }
-
-    setIsLoading(false);
   };
 
   const signOut = () => {

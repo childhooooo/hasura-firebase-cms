@@ -3,8 +3,6 @@ import {
   User,
   getAuth,
   signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
   onAuthStateChanged,
 } from "firebase/auth";
 import { firebaseApp } from "lib/firebase";
@@ -24,9 +22,10 @@ export type AuthState = {
   getAdminError: any;
 };
 
+// Adminいらなくね？
+
 const auth = getAuth(firebaseApp);
 auth.languageCode = "ja";
-const provider = new GoogleAuthProvider();
 
 export function useAuth(): AuthState {
   const [client, setClient] = useState(RequestClient.anonymouse());

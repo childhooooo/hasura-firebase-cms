@@ -136,6 +136,16 @@ export const FieldLineEditor = ({ field, onSuccess }: Props) => {
         <Form onSubmit={form.handleSubmit(update)}>
           <div className="line">
             <div className="label">
+              <label htmlFor="id">ID</label>
+            </div>
+
+            <div className="input">
+              <input type="text" id="id" name="id" value={field.id} disabled />
+            </div>
+          </div>
+
+          <div className="line">
+            <div className="label">
               <label htmlFor="name">フィールド名</label>
             </div>
 

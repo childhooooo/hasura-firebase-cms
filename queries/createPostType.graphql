@@ -3,14 +3,22 @@ mutation CreatePostType(
   $name: String!
   $icon_tag: String
   $order: Int = 10
+  $public: Boolean = false
 ) {
   insert_post_type_one(
-    object: { slug: $slug, name: $name, icon_tag: $icon_tag, order: $order }
+    object: {
+      slug: $slug
+      name: $name
+      icon_tag: $icon_tag
+      order: $order
+      public: $public
+    }
   ) {
     id
     slug
     name
     icon_tag
     order
+    public
   }
 }

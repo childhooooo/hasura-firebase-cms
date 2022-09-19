@@ -7,7 +7,7 @@ import { SimpleButton, WithAlert } from "components/button";
 // const Wysiwyg = typeof window === "object" ? require("components/input/Wysiwyg") : () => false;
 import dynamic from "next/dynamic";
 const Wysiwyg = dynamic(() => import("../../../components/input/Wysiwyg"), {
-  ssr: false
+  ssr: false,
 });
 import { PostInput, ImageInput, FieldsInput } from "./";
 
@@ -118,6 +118,7 @@ export const Editor = ({ post, revisionNumber, onUpdate }: Props) => {
   const fields = (post.post_type.fields as Field[]) || [];
 
   const submit: SubmitHandler<UpdatePostVariables> = async (input) => {
+    store.busy.setIsBusy(true);
     const tags = (input.tags || []).map((id: number) => {
       return {
         post_id: post.id,
@@ -175,6 +176,8 @@ export const Editor = ({ post, revisionNumber, onUpdate }: Props) => {
       },
       onError: (e) => {
         console.log(e);
+        alert("上手く更新できませんでした");
+        store.busy.setIsBusy(false);
       },
     });
   };

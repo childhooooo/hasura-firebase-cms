@@ -36,7 +36,7 @@ const HomePage: NextPage = () => {
   );
 
   useEffect(() => {
-    if(typeof window === "object") {
+    if (typeof window === "object") {
       setIsMounted(true);
     }
   }, []);

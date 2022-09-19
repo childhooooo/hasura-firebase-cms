@@ -5,6 +5,7 @@ query GetPostType($id: Int!) {
     name
     icon_tag
     order
+    public
     fields(order_by: { order: asc }) {
       id
       slug

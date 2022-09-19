@@ -5156,6 +5156,7 @@ export type Post_Type = {
   id: Scalars['Int'];
   name: Scalars['String'];
   order: Scalars['Int'];
+  public: Scalars['Boolean'];
   slug: Scalars['String'];
 };
 
@@ -5226,6 +5227,7 @@ export type Post_Type_Bool_Exp = {
   id?: InputMaybe<Int_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   order?: InputMaybe<Int_Comparison_Exp>;
+  public?: InputMaybe<Boolean_Comparison_Exp>;
   slug?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -5250,6 +5252,7 @@ export type Post_Type_Insert_Input = {
   id?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<Scalars['Int']>;
+  public?: InputMaybe<Scalars['Boolean']>;
   slug?: InputMaybe<Scalars['String']>;
 };
 
@@ -5303,6 +5306,7 @@ export type Post_Type_Order_By = {
   id?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
   order?: InputMaybe<Order_By>;
+  public?: InputMaybe<Order_By>;
   slug?: InputMaybe<Order_By>;
 };
 
@@ -5322,6 +5326,8 @@ export enum Post_Type_Select_Column {
   /** column name */
   Order = 'order',
   /** column name */
+  Public = 'public',
+  /** column name */
   Slug = 'slug'
 }
 
@@ -5331,6 +5337,7 @@ export type Post_Type_Set_Input = {
   id?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<Scalars['Int']>;
+  public?: InputMaybe<Scalars['Boolean']>;
   slug?: InputMaybe<Scalars['String']>;
 };
 
@@ -5372,6 +5379,8 @@ export enum Post_Type_Update_Column {
   Name = 'name',
   /** column name */
   Order = 'order',
+  /** column name */
+  Public = 'public',
   /** column name */
   Slug = 'slug'
 }
@@ -8257,10 +8266,11 @@ export type CreatePostTypeMutationVariables = Exact<{
   name: Scalars['String'];
   icon_tag?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<Scalars['Int']>;
+  public?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type CreatePostTypeMutation = { __typename?: 'mutation_root', insert_post_type_one?: { __typename?: 'post_type', id: number, slug: string, name: string, icon_tag?: string | null, order: number } | null };
+export type CreatePostTypeMutation = { __typename?: 'mutation_root', insert_post_type_one?: { __typename?: 'post_type', id: number, slug: string, name: string, icon_tag?: string | null, order: number, public: boolean } | null };
 
 export type CreateTagMutationVariables = Exact<{
   slug: Scalars['String'];
@@ -8387,7 +8397,7 @@ export type GetPostTypeQueryVariables = Exact<{
 }>;
 
 
-export type GetPostTypeQuery = { __typename?: 'query_root', post_type_by_pk?: { __typename?: 'post_type', id: number, slug: string, name: string, icon_tag?: string | null, order: number, fields: Array<{ __typename?: 'field', id: any, slug: string, name: string, field_type_id: number, required: boolean, multiple: boolean, order: number, field_post_type_id?: number | null, field_type: { __typename?: 'field_type', id: number, slug: string, name: string, order: number, is_post: boolean }, field_post_type?: { __typename?: 'post_type', id: number, slug: string, name: string } | null }> } | null };
+export type GetPostTypeQuery = { __typename?: 'query_root', post_type_by_pk?: { __typename?: 'post_type', id: number, slug: string, name: string, icon_tag?: string | null, order: number, public: boolean, fields: Array<{ __typename?: 'field', id: any, slug: string, name: string, field_type_id: number, required: boolean, multiple: boolean, order: number, field_post_type_id?: number | null, field_type: { __typename?: 'field_type', id: number, slug: string, name: string, order: number, is_post: boolean }, field_post_type?: { __typename?: 'post_type', id: number, slug: string, name: string } | null }> } | null };
 
 export type GetPostTypeBySlugQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -8481,10 +8491,11 @@ export type UpdatePostTypeMutationVariables = Exact<{
   name: Scalars['String'];
   icon_tag?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<Scalars['Int']>;
+  public?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type UpdatePostTypeMutation = { __typename?: 'mutation_root', update_post_type_by_pk?: { __typename?: 'post_type', id: number, slug: string, name: string, icon_tag?: string | null, order: number, fields: Array<{ __typename?: 'field', id: any, slug: string, name: string, required: boolean, multiple: boolean, order: number, field_type: { __typename?: 'field_type', id: number, slug: string, name: string, order: number } }> } | null };
+export type UpdatePostTypeMutation = { __typename?: 'mutation_root', update_post_type_by_pk?: { __typename?: 'post_type', id: number, slug: string, name: string, icon_tag?: string | null, order: number, public: boolean, fields: Array<{ __typename?: 'field', id: any, slug: string, name: string, required: boolean, multiple: boolean, order: number, field_type: { __typename?: 'field_type', id: number, slug: string, name: string, order: number } }> } | null };
 
 export type UpdateTagMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -8596,15 +8607,16 @@ export const useCreatePostMutation = <
       options
     );
 export const CreatePostTypeDocument = `
-    mutation CreatePostType($slug: String!, $name: String!, $icon_tag: String, $order: Int = 10) {
+    mutation CreatePostType($slug: String!, $name: String!, $icon_tag: String, $order: Int = 10, $public: Boolean = false) {
   insert_post_type_one(
-    object: {slug: $slug, name: $name, icon_tag: $icon_tag, order: $order}
+    object: {slug: $slug, name: $name, icon_tag: $icon_tag, order: $order, public: $public}
   ) {
     id
     slug
     name
     icon_tag
     order
+    public
   }
 }
     `;
@@ -9296,6 +9308,7 @@ export const GetPostTypeDocument = `
     name
     icon_tag
     order
+    public
     fields(order_by: {order: asc}) {
       id
       slug
@@ -9963,16 +9976,17 @@ export const useUpdatePostMutation = <
       options
     );
 export const UpdatePostTypeDocument = `
-    mutation UpdatePostType($id: Int!, $slug: String!, $name: String!, $icon_tag: String, $order: Int) {
+    mutation UpdatePostType($id: Int!, $slug: String!, $name: String!, $icon_tag: String, $order: Int = 10, $public: Boolean = false) {
   update_post_type_by_pk(
     pk_columns: {id: $id}
-    _set: {slug: $slug, name: $name, icon_tag: $icon_tag, order: $order}
+    _set: {slug: $slug, name: $name, icon_tag: $icon_tag, order: $order, public: $public}
   ) {
     id
     slug
     name
     icon_tag
     order
+    public
     fields(order_by: {order: asc}) {
       id
       slug

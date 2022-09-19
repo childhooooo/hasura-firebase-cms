@@ -49,7 +49,10 @@ export const PostTypeItem = () => {
       <Stacked paddingPos="top" paddingSize="narrow">
         {getPostType.data?.post_type_by_pk && (
           <Panel>
-            <Editor postType={getPostType.data.post_type_by_pk as Post_Type} />
+            <Editor
+              postType={getPostType.data.post_type_by_pk as Post_Type}
+              onUpdate={getPostType.refetch}
+            />
           </Panel>
         )}
       </Stacked>

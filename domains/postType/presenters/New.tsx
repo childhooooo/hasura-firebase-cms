@@ -14,7 +14,11 @@ import { StoreContext } from "providers";
 
 export const New = () => {
   const navigate = useNavigate();
-  const form = useForm<CreatePostTypeMutationVariables>();
+  const form = useForm<CreatePostTypeMutationVariables>({
+    defaultValues: {
+      public: true,
+    },
+  });
 
   const store = useContext(StoreContext);
 
@@ -33,8 +37,8 @@ export const New = () => {
         }
       },
       onError: (e) => {
-        alert('保存できませんでした');
-      }
+        alert("保存できませんでした");
+      },
     });
   };
 
@@ -106,6 +110,24 @@ export const New = () => {
             <p>正しく入力してください</p>
           </div>
         )}
+      </div>
+
+      <div className="line">
+        <div className="label">
+          <label htmlFor="public">一般公開する</label>
+        </div>
+
+        <div className="input">
+          <input
+            type="checkbox"
+            id="public"
+            defaultChecked={true}
+            onChange={(e) => {
+              form.setValue("public", e.target.checked);
+            }}
+          />
+          <input type="hidden" {...form.register("public")} />
+        </div>
       </div>
 
       <div className="line">

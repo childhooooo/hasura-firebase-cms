@@ -17,9 +17,10 @@ import { StoreContext } from "providers";
 
 type Props = {
   postType: Post_Type;
+  onUpdate?: () => void;
 };
 
-export const Editor = ({ postType }: Props) => {
+export const Editor = ({ postType, onUpdate }: Props) => {
   const navigate = useNavigate();
   const form = useForm<UpdatePostTypeMutationVariables>({
     defaultValues: {
@@ -28,6 +29,7 @@ export const Editor = ({ postType }: Props) => {
       name: postType.name,
       icon_tag: postType.icon_tag,
       order: postType.order,
+      public: postType.public,
     },
   });
   const store = useContext(StoreContext);
@@ -40,7 +42,22 @@ export const Editor = ({ postType }: Props) => {
   );
 
   const update: SubmitHandler<UpdatePostTypeMutationVariables> = (input) => {
-    updatePostType.mutate(input);
+    store.busy.setIsBusy(true);
+
+    updatePostType.mutate(input, {
+      onSuccess: () => {
+        if (onUpdate) {
+          onUpdate();
+        }
+
+        store.busy.setIsBusy(false);
+      },
+      onError: (e) => {
+        console.error(e);
+        alert("上手く更新できませんでした");
+        store.busy.setIsBusy(false);
+      },
+    });
   };
 
   const remove = () => {
@@ -92,6 +109,16 @@ export const Editor = ({ postType }: Props) => {
   return (
     <Component>
       <Form onSubmit={form.handleSubmit(update)}>
+        <div className="line">
+          <div className="label">
+            <label htmlFor="id">ID</label>
+          </div>
+
+          <div className="input">
+            <input type="text" id="id" name="id" value={postType.id} disabled />
+          </div>
+        </div>
+
         <div className="line">
           <div className="label">
             <label htmlFor="name">投稿タイプ名</label>
@@ -171,6 +198,24 @@ export const Editor = ({ postType }: Props) => {
               <p>表示順序を正しく入力してください</p>
             </div>
           )}
+        </div>
+
+        <div className="line">
+          <div className="label">
+            <label htmlFor="public">一般公開する</label>
+          </div>
+
+          <div className="input">
+            <input
+              type="checkbox"
+              id="public"
+              defaultChecked={form.getValues("public") ? true : false}
+              onChange={(e) => {
+                form.setValue("public", e.target.checked);
+              }}
+            />
+            <input type="hidden" {...form.register("public")} />
+          </div>
         </div>
 
         <div className="line">

@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import formidable from "formidable";
 // @ts-ignore
 import { ImagePool } from "@squoosh/lib";
@@ -47,6 +48,21 @@ export default async function handler(
 
     result = await new Promise((resolve, _reject) => {
       form.parse(req, async (_error, _fields, files) => {
+        try {
+          const auth = getAuth();
+          await signInWithEmailAndPassword(
+            auth,
+            process.env.ADMIN_EMAIL || "",
+            process.env.ADMIN_PASSWORD || ""
+          );
+        } catch (e) {
+          resolve({
+            isSuccess: false,
+            status: 500,
+            message: "Failed to sign-in to Firebase.",
+          });
+        }
+
         const data = Array.isArray(files.image) ? files.image[0] : files.image;
 
         if (!data || !data.originalFilename) {

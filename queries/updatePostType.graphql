@@ -3,17 +3,25 @@ mutation UpdatePostType(
   $slug: String!
   $name: String!
   $icon_tag: String
-  $order: Int
+  $order: Int = 10
+  $public: Boolean = false
 ) {
   update_post_type_by_pk(
     pk_columns: { id: $id }
-    _set: { slug: $slug, name: $name, icon_tag: $icon_tag, order: $order }
+    _set: {
+      slug: $slug
+      name: $name
+      icon_tag: $icon_tag
+      order: $order
+      public: $public
+    }
   ) {
     id
     slug
     name
     icon_tag
     order
+    public
     fields(order_by: { order: asc }) {
       id
       slug

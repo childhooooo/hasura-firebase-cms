@@ -2,6 +2,10 @@ export function nl2br(str: string) {
   return str.replace(/\r\n/g, "<br />").replace(/(\n|\r)/g, "<br />");
 }
 
+export function url(path: string): string {
+  return `${process.env.NEXT_PUBLIC_BASE_PATH}/${path}`;
+}
+
 export function getUniqueString(myStrong?: number): string {
   let strong = 1000;
   if (myStrong) strong = myStrong;

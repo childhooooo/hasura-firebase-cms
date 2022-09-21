@@ -30,7 +30,7 @@ export const Link = ({ post }: Props) => {
         {post.tags.length > 0 && (
           <ul className="tags">
             {((post.tags as Post_Tag[]) || []).map((t: Post_Tag) => {
-              return <li>#{t.tag.name}</li>;
+              return <li key={`${t.post_id}-${t.tag_id}`}>#{t.tag.name}</li>;
             })}
           </ul>
         )}

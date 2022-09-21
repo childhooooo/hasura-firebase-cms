@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { firebaseApp } from "lib/firebase";
-import { useGetAdminQuery } from "lib/graphql/generated";
+import { useGetAdminQuery } from "lib/graphql";
 import { Admin } from "./entity";
 import { RequestClient } from "./valueObject";
 

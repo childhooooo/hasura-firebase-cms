@@ -7,7 +7,7 @@ import { Link } from "domains/postType";
 
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Post_Type, useGetPostTypesQuery } from "lib/graphql/generated";
+import { Post_Type, useGetPostTypesQuery } from "lib/graphql";
 import { StoreContext } from "providers";
 
 export const PostTypeList = () => {

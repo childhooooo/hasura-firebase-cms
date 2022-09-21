@@ -8,6 +8,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
 function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+  // @ts-ignore
   return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */

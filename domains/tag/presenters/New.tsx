@@ -9,7 +9,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import {
   CreateTagMutationVariables,
   useCreateTagMutation,
-} from "lib/graphql/generated";
+} from "lib/graphql";
 import { StoreContext } from "providers";
 
 export const New = () => {

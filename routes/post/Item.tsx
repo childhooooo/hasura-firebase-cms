@@ -10,7 +10,7 @@ import {
   Post,
   Revision,
   useGetPostQuery,
-} from "lib/graphql/generated";
+} from "lib/graphql";
 import { StoreContext } from "providers";
 
 export const PostItem = () => {

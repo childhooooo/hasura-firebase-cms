@@ -9,7 +9,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import {
   CreatePostTypeMutationVariables,
   useCreatePostTypeMutation,
-} from "lib/graphql/generated";
+} from "lib/graphql";
 import { StoreContext } from "providers";
 
 export const New = () => {
@@ -36,7 +36,7 @@ export const New = () => {
           navigate(`/post-type/${data.insert_post_type_one.id}`);
         }
       },
-      onError: (e) => {
+      onError: (_e) => {
         alert("保存できませんでした");
       },
     });

@@ -12,7 +12,7 @@ import {
   UpdatePostTypeMutationVariables,
   useUpdatePostTypeMutation,
   useDeletePostTypeMutation,
-} from "lib/graphql/generated";
+} from "lib/graphql";
 import { StoreContext } from "providers";
 
 type Props = {

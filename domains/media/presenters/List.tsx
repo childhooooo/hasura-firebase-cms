@@ -3,7 +3,7 @@ import { Stacked, Columns } from "unflexible-ui-core";
 import { SimplePagination } from "components/pagination";
 
 import { useEffect, useContext, useState } from "react";
-import { Media, useGetMediasQuery } from "lib/graphql/generated";
+import { Media, useGetMediasQuery } from "lib/graphql";
 import { extractFile } from "domains/media";
 import { StoreContext } from "providers";
 

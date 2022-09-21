@@ -4,7 +4,7 @@ import { sizes, colors } from "variables";
 import { format } from "date-fns";
 import { Link as L } from "react-router-dom";
 
-import { Post, Content_Tag, Post_Tag } from "lib/graphql/generated";
+import { Post, Content_Tag, Post_Tag } from "lib/graphql";
 
 type Props = {
   post: Post;

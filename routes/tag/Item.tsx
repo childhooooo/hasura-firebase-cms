@@ -6,7 +6,7 @@ import { Editor } from "domains/tag";
 
 import { useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Tag, useGetTagQuery } from "lib/graphql/generated";
+import { Tag, useGetTagQuery } from "lib/graphql";
 import { StoreContext } from "providers";
 
 export const TagItem = () => {

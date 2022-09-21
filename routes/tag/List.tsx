@@ -1,19 +1,13 @@
-import styled from "styled-components";
-import { colors, sizes } from "variables";
+import { colors } from "variables";
 import { Stacked, PlainText, Columns, Block } from "unflexible-ui-core";
 import { Panel } from "components/container";
 import { SimpleList } from "components/list";
 import { IconTagButton } from "components/button";
 import { Link } from "domains/tag";
 
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Tag,
-  Post_Type,
-  useGetTagsQuery,
-  useGetPostTypesQuery,
-} from "lib/graphql";
+import { Tag, useGetTagsQuery } from "lib/graphql";
 import { StoreContext } from "providers";
 
 export const TagList = () => {

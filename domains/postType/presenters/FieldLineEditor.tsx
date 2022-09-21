@@ -6,7 +6,6 @@ import { Form } from "components/container";
 import { WithAlert, SimpleButton } from "components/button";
 
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   Post_Type,
@@ -17,7 +16,7 @@ import {
   useDeleteFieldMutation,
   useGetPostTypesQuery,
   useGetFieldTypesQuery,
-} from "lib/graphql/generated";
+} from "lib/graphql";
 import { StoreContext } from "providers";
 
 type Props = {
@@ -26,7 +25,6 @@ type Props = {
 };
 
 export const FieldLineEditor = ({ field, onSuccess }: Props) => {
-  const navigate = useNavigate();
   const form = useForm<UpdateFieldMutationVariables>({
     defaultValues: {
       id: field.id,

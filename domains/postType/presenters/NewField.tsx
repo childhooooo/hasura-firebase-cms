@@ -3,7 +3,7 @@ import { Form } from "components/container";
 import { SimpleButton } from "components/button";
 import { colors } from "variables";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import {
   Post_Type,
@@ -12,7 +12,7 @@ import {
   useCreateFieldMutation,
   useGetPostTypesQuery,
   useGetFieldTypesQuery,
-} from "lib/graphql/generated";
+} from "lib/graphql";
 import { StoreContext } from "providers";
 
 type Props = {

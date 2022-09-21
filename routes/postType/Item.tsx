@@ -7,7 +7,7 @@ import { Editor, NewField, FieldLineEditor } from "domains/postType";
 
 import { useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Post_Type, Field, useGetPostTypeQuery } from "lib/graphql/generated";
+import { Post_Type, Field, useGetPostTypeQuery } from "lib/graphql";
 import { StoreContext } from "providers";
 
 export const PostTypeItem = () => {

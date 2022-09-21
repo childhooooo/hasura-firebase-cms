@@ -3,7 +3,7 @@ import { rgba } from 'polished';
 import { sizes, colors } from 'variables';
 import { Link as L } from 'react-router-dom';
 
-import { Post_Type } from 'lib/graphql/generated';
+import { Post_Type } from 'lib/graphql';
 
 type Props = {
   postType: Post_Type;

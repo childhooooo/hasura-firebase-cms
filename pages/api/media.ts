@@ -21,7 +21,7 @@ export const config = {
   },
 };
 
-const sizes = ["full", "1600", "1200", "800"];
+const sizes = ["full", "2000", "1600", "1200", "800"];
 const restEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || "";
 const graphqlEndpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "";
 const hasuraAdminSecret = process.env.HASURA_ADMIN_SECRET || "";
@@ -176,15 +176,20 @@ async function encode(data: any): Promise<EncodedImage[]> {
     const preprocesses = [
       images[1].image.preprocess({
         resize: {
-          width: 1600,
+          width: 2000,
         },
       }),
       images[2].image.preprocess({
         resize: {
-          width: 1200,
+          width: 1600,
         },
       }),
       images[3].image.preprocess({
+        resize: {
+          width: 1200,
+        },
+      }),
+      images[4].image.preprocess({
         resize: {
           width: 800,
         },

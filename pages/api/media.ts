@@ -18,11 +18,11 @@ import { firebaseApp } from "lib/firebase";
 export const config = {
   api: {
     bodyParser: false,
+    responseLimit: '100mb',
   },
 };
 
 const sizes = ["full", "2000", "1600", "1200", "800"];
-const restEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || "";
 const graphqlEndpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "";
 const hasuraAdminSecret = process.env.HASURA_ADMIN_SECRET || "";
 

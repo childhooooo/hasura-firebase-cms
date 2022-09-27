@@ -8,6 +8,7 @@ import Quill from "quill";
 import { QuillDeltaToHtmlConverter } from "quill-delta-to-html";
 import { Media } from "lib/graphql";
 import { StoreContext } from "providers";
+import { extractFile } from "domains/media";
 
 type Props = {
   editorId: string;
@@ -30,7 +31,8 @@ const Wysiwyg = ({
       return;
     }
 
-    quill.insertEmbed(range.index, "image", image.url);
+    const url = extractFile(image, "1200")?.url || image.url;
+    quill.insertEmbed(range.index, "image", url);
   };
 
   const getConverted = (ops: any) => {

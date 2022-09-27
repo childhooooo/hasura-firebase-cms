@@ -21,7 +21,7 @@ export const config = {
   },
 };
 
-const sizes = ["full", "2000", "1600", "1200", "800"];
+const sizes = [2000, 1600, 1200, 800];
 const graphqlEndpoint = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "";
 const hasuraAdminSecret = process.env.HASURA_ADMIN_SECRET || "";
 
@@ -139,7 +139,7 @@ export default async function handler(
 type EncodedImage = {
   baseName: string;
   fileType: "jpg" | "png";
-  size: string;
+  size: number;
   image: any;
 };
 
@@ -148,10 +148,20 @@ async function encode(data: any): Promise<EncodedImage[]> {
 
   try {
     let fileType: "jpg" | "png";
+    let resizeMethod: "triangle" | "catrom" | "mitchell" | "lanczos3";
+    let otherOptions: any = {};
     if (/\.(jpe?g)$/i.test(data.originalFilename || "")) {
       fileType = "jpg";
+      resizeMethod = "lanczos3";
     } else if (/\.(png)$/i.test(data.originalFilename || "")) {
       fileType = "png";
+      resizeMethod = "mitchell";
+      otherOptions = {
+        quant: {
+          numColors: 128,
+          dither: 0.9,
+        },
+      };
     } else {
       throw new Error("Failed to encode image: Invalid format.");
     }
@@ -162,7 +172,7 @@ async function encode(data: any): Promise<EncodedImage[]> {
 
     const file = await fs.readFile(data.filepath);
 
-    const images = [];
+    const images: EncodedImage[] = [];
     for (let i = 0; i < sizes.length; i++) {
       images.push({
         baseName,
@@ -172,28 +182,16 @@ async function encode(data: any): Promise<EncodedImage[]> {
       });
     }
 
-    const preprocesses = [
-      images[1].image.preprocess({
+    const preprocesses = images.map((image: EncodedImage) => {
+      return image.image.preprocess({
         resize: {
-          width: 2000,
+          width: image.size,
+          method: resizeMethod,
         },
-      }),
-      images[2].image.preprocess({
-        resize: {
-          width: 1600,
-        },
-      }),
-      images[3].image.preprocess({
-        resize: {
-          width: 1200,
-        },
-      }),
-      images[4].image.preprocess({
-        resize: {
-          width: 800,
-        },
-      }),
-    ];
+        ...otherOptions,
+      });
+    });
+
     await Promise.all(preprocesses);
 
     const encodes = images.map((i) => {
@@ -205,7 +203,7 @@ async function encode(data: any): Promise<EncodedImage[]> {
       } else if (fileType === "png") {
         return i.image.encode({
           oxipng: {
-            level: 4,
+            level: 6,
           },
           webp: { near_lossless: 50, use_sharp_yuv: 1 },
         });
@@ -256,7 +254,7 @@ async function upload(images: EncodedImage[]): Promise<UploadResult> {
               });
               uploadedRefs.push(r.ref);
               files.push({
-                label: i.size,
+                label: i.size.toString(10),
                 url: await getDownloadURL(r.ref),
                 firebase_path: jpgPath,
               });
@@ -298,7 +296,7 @@ async function upload(images: EncodedImage[]): Promise<UploadResult> {
               });
               uploadedRefs.push(r.ref);
               files.push({
-                label: i.size,
+                label: i.size.toString(10),
                 url: await getDownloadURL(r.ref),
                 firebase_path: pngPath,
               });
@@ -400,6 +398,7 @@ mutation CreateMedia(
 
     const { errors } = await res.json();
     if (errors && errors.length > 0) {
+      console.log(errors);
       throw new Error("GraphQL error");
     }
   } catch (e: any) {

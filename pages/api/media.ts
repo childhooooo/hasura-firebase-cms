@@ -18,7 +18,6 @@ import { firebaseApp } from "lib/firebase";
 export const config = {
   api: {
     bodyParser: false,
-    responseLimit: '100mb',
   },
 };
 

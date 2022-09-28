@@ -17,12 +17,7 @@ type Props = {
   disabled?: boolean;
 };
 
-const Wysiwyg = ({
-  editorId,
-  onChange,
-  defaultContent,
-  disabled,
-}: Props) => {
+const Wysiwyg = ({ editorId, onChange, defaultContent, disabled }: Props) => {
   const store = useContext(StoreContext);
 
   const insertImage = (quill: Quill, image: Media) => {
@@ -70,7 +65,7 @@ const Wysiwyg = ({
       modules: {
         toolbar: {
           container: [
-            [{ header: [2, 3, 4, 5, 6, false] }],
+            [{ header: 2 }, { header: 3 }, { header: 4 }],
             ["bold", "italic", "underline", "strike", "link"],
             [{ list: "ordered" }, { list: "bullet" }],
             ["image"],
@@ -160,6 +155,48 @@ const Container = styled.div<ContainerProps>`
     z-index: 2;
     font-size: 16px;
     line-height: 1.75;
+  }
+
+  .ql-tooltip {
+    z-index: 3;
+  }
+
+  button.ql-header svg {
+    display: none;
+  }
+
+  .ql-header[value="2"]:after {
+    clear: both;
+    content: "H2";
+    display: table;
+    font-weight: 600;
+    margin-top: -2px;
+    margin-left: 1px;
+    font-size: 14px;
+  }
+
+  .ql-header[value="3"]:after {
+    clear: both;
+    content: "H3";
+    display: table;
+    font-weight: 600;
+    margin-top: -2px;
+    margin-left: 1px;
+    font-size: 14px;
+  }
+
+  .ql-header[value="4"]:after {
+    clear: both;
+    content: "H4";
+    display: table;
+    font-weight: 600;
+    margin-top: -2px;
+    margin-left: 1px;
+    font-size: 14px;
+  }
+
+  button.ql-header.ql-active {
+    color: #3891d0;
   }
 
   h2 {

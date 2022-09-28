@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "dotenv -c -- graphql-codegen --config ./lib/graphql/codegen.js"
+    "generate": "dotenv -c -- graphql-codegen --config ./lib/graphql/codegen.js",
+    "server:run": "npm run build && npx forever start -c \"npm start -- -p 53000\" ./",
+    "server:stop": "npx forever stop -c \"npm start -- -p 53000\" ./ && kill -9 `lsof -t -i:53000`"
   },
   "dependencies": {
     "@squoosh/lib": "^0.4.0",

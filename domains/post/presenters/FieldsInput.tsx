@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { colors } from "variables";
 // import { Wysiwyg } from "components/input";
-// const Wysiwyg = typeof window === "object" ? require("components/input/Wysiwyg") : () => false;
 import dynamic from "next/dynamic";
 const Wysiwyg = dynamic(() => import("../../../components/input/Wysiwyg"), {
-  ssr: false
+  ssr: false,
 });
 import { PostInput, ImageInput } from "./";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { Post, Field, Value, Media } from "lib/graphql";
 
@@ -29,8 +28,7 @@ export const FieldsInput = ({
   field,
   disabled,
 }: Props) => {
-  const [initialized, setInitialized] = useState(false);
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: `${name}.${index}` as const,
     rules: {
@@ -46,120 +44,108 @@ export const FieldsInput = ({
   });
 
   useEffect(() => {
-    setInitialized(false);
-  }, [defaultValues]);
+    if (defaultValues && defaultValues.length > 0) {
+      const initialFields = defaultValues
+        .map((v: Value) => {
+          switch (field.field_type.slug) {
+            case "text":
+              return {
+                text: {
+                  data: {
+                    body: v.text?.body || "",
+                  },
+                },
+              };
+            case "textarea":
+              return {
+                text: {
+                  data: {
+                    body: v.text?.body || "",
+                  },
+                },
+              };
+            case "richtext":
+              return {
+                text: {
+                  data: {
+                    body: v.text?.body || "",
+                  },
+                },
+              };
+            case "slug":
+              return {
+                text: {
+                  data: {
+                    body: v.text?.body || "",
+                  },
+                },
+              };
+            case "integer":
+              return {
+                integer: {
+                  data: {
+                    body: v.integer?.body || "",
+                  },
+                },
+              };
+            case "numeric":
+              return {
+                numeric: {
+                  data: {
+                    body: v.numeric?.body || "",
+                  },
+                },
+              };
+            case "boolean":
+              append({
+                boolean: {
+                  data: {
+                    body: v.boolean?.body || "",
+                  },
+                },
+              });
+              break;
+            case "date":
+              return {
+                timestamp: {
+                  data: {
+                    body: v.timestamp?.body || "",
+                  },
+                },
+              };
+            case "datetime":
+              return {
+                timestamp: {
+                  data: {
+                    body: v.timestamp?.body || "",
+                  },
+                },
+              };
+            case "post":
+              return {
+                post: {
+                  data: {
+                    post_id: v.post?.body.id || "",
+                  },
+                },
+              };
+            case "image":
+              return {
+                media: {
+                  data: {
+                    media_id: v.media?.body.id || "",
+                  },
+                },
+              };
+            default:
+              return null;
+          }
+        })
+        .filter((f) => f !== null);
 
-  useEffect(() => {
-    if (!initialized && defaultValues && defaultValues.length > 0) {
-      remove();
-      for (const v of defaultValues) {
-        switch (field.field_type.slug) {
-          case "text":
-            append({
-              text: {
-                data: {
-                  body: v.text?.body || "",
-                },
-              },
-            });
-            break;
-          case "textarea":
-            append({
-              text: {
-                data: {
-                  body: v.text?.body || "",
-                },
-              },
-            });
-            break;
-          case "richtext":
-            append({
-              text: {
-                data: {
-                  body: v.text?.body || "",
-                },
-              },
-            });
-            break;
-          case "slug":
-            append({
-              text: {
-                data: {
-                  body: v.text?.body || "",
-                },
-              },
-            });
-            break;
-          case "integer":
-            append({
-              integer: {
-                data: {
-                  body: v.integer?.body || "",
-                },
-              },
-            });
-            break;
-          case "numeric":
-            append({
-              numeric: {
-                data: {
-                  body: v.numeric?.body || "",
-                },
-              },
-            });
-            break;
-          case "boolean":
-            append({
-              boolean: {
-                data: {
-                  body: v.boolean?.body || "",
-                },
-              },
-            });
-            break;
-          case "date":
-            append({
-              timestamp: {
-                data: {
-                  body: v.timestamp?.body || "",
-                },
-              },
-            });
-            break;
-          case "datetime":
-            append({
-              timestamp: {
-                data: {
-                  body: v.timestamp?.body || "",
-                },
-              },
-            });
-            break;
-          case "post":
-            append({
-              post: {
-                data: {
-                  post_id: v.post?.body.id || "",
-                },
-              },
-            });
-            break;
-          case "image":
-            append({
-              media: {
-                data: {
-                  media_id: v.media?.body.id || "",
-                },
-              },
-            });
-            break;
-          default:
-            append({});
-        }
-      }
+      replace(initialFields);
     }
-    setInitialized(true);
-  }, [defaultValues]);
+  }, []);
 
   return (
     <Component>

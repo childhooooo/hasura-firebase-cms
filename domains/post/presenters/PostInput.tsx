@@ -54,7 +54,7 @@ export const PostInput = ({ slug, defaultId, onChange, disabled }: Props) => {
         ((getPosts.data?.post as []) || []).map((p: Post) => {
           return (
             <option value={p.id} key={p.id} selected={p.id === defaultId}>
-              {p.contents[0].title}[{p.id}]
+              {p.title}[{p.id}]
             </option>
           );
         })}

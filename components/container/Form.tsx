@@ -30,11 +30,9 @@ const Component = styled.form`
   }
 
   ul.input {
+    flex-wrap: wrap;
+    gap: ${sizes.gapM};
     list-style: none;
-
-    > li:not(:first-child) {
-      margin-left: 1rem;
-    }
   }
 
   .input {

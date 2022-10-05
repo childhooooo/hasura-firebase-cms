@@ -248,7 +248,7 @@ export const New = ({ postType }: Props) => {
                           {
                             required: f.required,
                             minLength: 1,
-                            maxLength: 10000,
+                            maxLength: 100000,
                           }
                         )}
                       />

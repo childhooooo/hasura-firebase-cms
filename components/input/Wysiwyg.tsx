@@ -10,6 +10,47 @@ import { Media } from "lib/graphql";
 import { StoreContext } from "providers";
 import { extractFile } from "domains/media";
 
+const ATTRIBUTES = [
+  "id",
+  "class",
+  "src",
+  "alt",
+  "width",
+  "height",
+  "style",
+  "srcset",
+];
+
+const ImageBlot = Quill.import("formats/image");
+export class CustomImageBlot extends ImageBlot {
+  static blotName = "customImage";
+  static tagName = "img";
+
+  static create(value: any) {
+    let node = super.create();
+    for (const attr of ATTRIBUTES) {
+      if (value[attr]) {
+        node.setAttribute(attr, value[attr]);
+      }
+    }
+
+    return node;
+  }
+
+  static value(node: any) {
+    var blot: any = {};
+    for (const attr of ATTRIBUTES) {
+      if (node.getAttribute(attr)) {
+        blot[attr] = node.getAttribute(attr);
+      }
+    }
+
+    return blot;
+  }
+}
+
+Quill.register(CustomImageBlot);
+
 type Props = {
   editorId: string;
   onChange: (content: string) => void;
@@ -27,7 +68,15 @@ const Wysiwyg = ({ editorId, onChange, defaultContent, disabled }: Props) => {
     }
 
     const url = extractFile(image, "1200")?.url || image.url;
-    quill.insertEmbed(range.index, "image", url);
+    quill.insertEmbed(range.index, "customImage", {
+      src: url,
+      alt: "画像",
+      srcset: `${extractFile(image, "2000")?.url || image.url} 2000w, ${
+        extractFile(image, "1600")?.url || image.url
+      } 1600w, ${extractFile(image, "1200")?.url || image.url} 1200w, ${
+        extractFile(image, "800")?.url || image.url
+      } 800w`,
+    });
   };
 
   const getConverted = (ops: any) => {
@@ -35,12 +84,23 @@ const Wysiwyg = ({ editorId, onChange, defaultContent, disabled }: Props) => {
       multiLineParagraph: false,
     });
 
+    /*
     converter.afterRender((groupType, htmlString) => {
       if (groupType === "video") {
         const result = htmlString.replace("iframe", "video");
         return result;
       } else {
         return htmlString;
+      }
+    });
+  */
+
+    converter.renderCustomWith((customOp, _contextOp) => {
+      if (customOp.insert.type === "customImage") {
+        const value = customOp.insert.value;
+        return `<picture><source srcset="${value.srcset}" /><img src="${value.src}" srcset="${value.srcset}" alt="${value.alt}" loading="lazy" /></picture>`;
+      } else {
+        return "<br/>";
       }
     });
 
@@ -66,7 +126,9 @@ const Wysiwyg = ({ editorId, onChange, defaultContent, disabled }: Props) => {
         toolbar: {
           container: [
             [{ header: 2 }, { header: 3 }, { header: 4 }],
+            [{ size: [false, "large", "huge"] }],
             ["bold", "italic", "underline", "strike", "link"],
+            [{ color: [] }],
             [{ list: "ordered" }, { list: "bullet" }],
             ["image"],
           ],
@@ -155,6 +217,7 @@ const Container = styled.div<ContainerProps>`
     z-index: 2;
     font-size: 16px;
     line-height: 1.75;
+    max-height: 800px;
   }
 
   .ql-tooltip {

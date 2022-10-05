@@ -16,7 +16,7 @@ export const List = ({ onSelect }: Props) => {
   const store = useContext(StoreContext);
   const [page, setPage] = useState(1);
 
-  const limit = 10;
+  const limit = 20;
   const getImages = useGetMediasQuery(store.auth.client.graphQLClient, {
     limit,
     offset: limit * (page - 1),

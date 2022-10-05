@@ -210,7 +210,7 @@ export const FieldsInput = ({
                       {
                         required: true,
                         minLength: 1,
-                        maxLength: 10000,
+                        maxLength: 100000,
                       }
                     )}
                   />
